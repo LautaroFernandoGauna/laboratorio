@@ -1,6 +1,8 @@
 package edu.lab.domain;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Reserva {
@@ -16,13 +18,28 @@ public class Reserva {
     public Reserva() {
     }
     
-    public Reserva(int numero, LocalDate fecha, EstadoReserva estado, Cliente cliente, List<DetalleReserva> detalles) {
+    public Reserva(int numero, LocalDate fecha, EstadoReserva estado, Cliente cliente, DetalleReserva detalles) {
         this.numero = numero;
         this.fecha = fecha;
         this.estado = estado;
         this.cliente = cliente;
-        this.detalles = detalles;
+        this.detalles = new ArrayList<>();
+        this.detalles.add(detalles);
     }
+
+    public void agregarDetalle(DetalleReserva detalle){
+        this.detalles.add(detalle);
+    }
+    public double calcularTotal() {
+        return detalles.stream()
+                .mapToDouble(detalle -> {
+                    int dias = (int) ChronoUnit.DAYS.between(
+                            detalle.getFechaDesde(),
+                            detalle.getFechaHasta());
+                    return detalle.getVehiculo().calcularPrecio(dias);})
+                .sum();
+    }    
+
     public int getNumero() {
         return numero;
     }

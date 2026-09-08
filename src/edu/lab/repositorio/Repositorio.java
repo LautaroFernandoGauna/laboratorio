@@ -22,6 +22,9 @@ public class Repositorio<T> {
         }
         return this.lista.remove(elemento);
     }
+    public int size(){
+        return lista.size();
+    }
     public List<T> verTodo(){
         return Collections.unmodifiableList(lista);
     }
